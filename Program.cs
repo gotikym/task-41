@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 internal class Program
@@ -23,22 +23,27 @@ internal class Program
             switch (userChose)
             {
                 case ShowAllPlayers:
+                    Console.Clear();
                     dataBase.ShowAllPlayers();
                     break;
 
                 case AddPlayer:
+                    Console.Clear();
                     dataBase.AddPlayer();
                     break;
 
                 case BanPlayer:
+                    Console.Clear();
                     dataBase.BanPlayer();
                     break;
 
                 case UnbanPlayer:
+                    Console.Clear();
                     dataBase.UnbanPlayer();
                     break;
 
                 case DeletePlayer:
+                    Console.Clear();
                     dataBase.DeletePlayer();
                     break;
 
@@ -53,7 +58,6 @@ internal class Program
 class DataBase
 {
     private List<Player> _players = new List<Player>();
-    Player player = new Player();
 
     public DataBase()
     {
@@ -78,59 +82,25 @@ class DataBase
         Console.WriteLine("Введите уровень игрока: ");
         level = Convert.ToInt32(Console.ReadLine());
 
-        player.AddPlayer(_players, nickName, level);
+        _players.Add(new Player(nickName, level, false));
     }
 
     public void BanPlayer()
     {
-        Console.WriteLine("Введите уникальный номер игрока: ");
-        int uniqNumber = Convert.ToInt32(Console.ReadLine());
-
-        player.BanPlayer(_players, uniqNumber);
+        FindPlayer(GetUniqNumber()).BanPlayer();
     }
 
     public void UnbanPlayer()
     {
-        Console.WriteLine("Введите уникальный номер игрока: ");
-        int uniqNumber = Convert.ToInt32(Console.ReadLine());
-
-        player.UnbanPlayer(_players, uniqNumber);
+         FindPlayer(GetUniqNumber()).UnbanPlayer();
     }
 
     public void DeletePlayer()
     {
-        Console.WriteLine("Введите уникальный номер игрока: ");
-        int uniqNumber = Convert.ToInt32(Console.ReadLine());
-
-        player.DeletePlayer(_players, uniqNumber);
-    }
-}
-
-class Player
-{
-    public int UniqNumber { get; private set; }
-    public string NickName { get; private set; }
-    public int Level { get; private set; }
-    public bool IsBane { get; private set; }
-
-    public Player(int uniqNumber, string nickName, int level, bool isBane)
-    {
-        UniqNumber = uniqNumber;
-        NickName = nickName;
-        Level = level;
-        IsBane = isBane;
+        _players.Remove(FindPlayer(GetUniqNumber()));
     }
 
-    public Player()
-    {
-    }
-
-    public void AddPlayer(List<Player> _players, string nickName, int level)
-    {
-        _players.Add(new Player(++UniqNumber, nickName, level, false));
-    }
-
-    public Player FindPlayer(List<Player> _players, int uniqNumber)
+    public Player FindPlayer(int uniqNumber)
     {
         foreach (Player player in _players)
         {
@@ -142,22 +112,58 @@ class Player
 
         return null;
     }
-
-    public void BanPlayer(List<Player> _players, int uniqNumber)
+    static int GetUniqNumber()
     {
-        Player player = FindPlayer(_players, uniqNumber);
-        player.IsBane = true;
+        bool isParse = false;
+        int numberForReturn = 0;
+
+        while (isParse == false)
+        {            
+            Console.WriteLine("Введите уникальный номер игрока: ");
+            string uniqNumber = Console.ReadLine();
+
+            if (isParse == int.TryParse(uniqNumber, out int number))
+            { 
+            }
+            else
+            {
+                Console.WriteLine("Вы не корректно ввели число.");                
+            }
+
+            numberForReturn = number;
+        }
+
+        return numberForReturn;
+    }
+}
+
+class Player
+{
+    public static int UniqNumbers { get; private set; }
+    public int UniqNumber { get; private set; }
+    public string NickName { get; private set; }
+    public int Level { get; private set; }
+    public bool IsBane { get; private set; }
+
+    public Player(string nickName, int level, bool isBane)
+    {
+        UniqNumber = ++UniqNumbers;
+        NickName = nickName;
+        Level = level;
+        IsBane = isBane;
     }
 
-    public void UnbanPlayer(List<Player> _players, int uniqNumber)
+    public Player()
     {
-        Player player = FindPlayer(_players, uniqNumber);
-        player.IsBane = false;
     }
 
-    public void DeletePlayer(List<Player> _players, int uniqNumber)
+    public void BanPlayer()
     {
-        Player player = FindPlayer(_players, uniqNumber);
-        _players.Remove(player);
+        this.IsBane = true;
+    }
+
+    public void UnbanPlayer()
+    {
+        this.IsBane = false;
     }
 }
