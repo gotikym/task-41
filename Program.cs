@@ -79,20 +79,19 @@ class DataBase
 
         Console.WriteLine("Введите ник игрока: ");
         nickName = Console.ReadLine();
-        Console.WriteLine("Введите уровень игрока: ");
-        level = Convert.ToInt32(Console.ReadLine());
+        level = GetLevel();
 
         _players.Add(new Player(nickName, level, false));
     }
 
     public void BanPlayer()
     {
-        FindPlayer(GetUniqNumber()).BanPlayer();
+        FindPlayer(GetUniqNumber()).Ban();
     }
 
     public void UnbanPlayer()
     {
-         FindPlayer(GetUniqNumber()).UnbanPlayer();
+        FindPlayer(GetUniqNumber()).Unban();
     }
 
     public void DeletePlayer()
@@ -112,22 +111,49 @@ class DataBase
 
         return null;
     }
+
+    static int GetLevel()
+    {
+        bool isParse = false;
+        int numberForReturn = 0;
+
+        while (isParse == false)
+        {
+            Console.WriteLine("Введите уровень игрока: ");
+            string playerLevel = Console.ReadLine();
+
+            if (isParse = int.TryParse(playerLevel, out int number))
+            {
+                Console.WriteLine("Игроку присвоен уровень: " + number);
+            }
+            else
+            {
+                Console.WriteLine("Вы не корректно ввели число.");
+            }
+
+            numberForReturn = number;
+        }
+
+        return numberForReturn;
+    }
+
     static int GetUniqNumber()
     {
         bool isParse = false;
         int numberForReturn = 0;
 
         while (isParse == false)
-        {            
+        {
             Console.WriteLine("Введите уникальный номер игрока: ");
             string uniqNumber = Console.ReadLine();
 
-            if (isParse == int.TryParse(uniqNumber, out int number))
-            { 
+            if (isParse = int.TryParse(uniqNumber, out int number))
+            {
+                Console.WriteLine("Вы выбрали игрока с уникальным номером: " + number);
             }
             else
             {
-                Console.WriteLine("Вы не корректно ввели число.");                
+                Console.WriteLine("Вы не корректно ввели число.");
             }
 
             numberForReturn = number;
@@ -157,13 +183,13 @@ class Player
     {
     }
 
-    public void BanPlayer()
+    public void Ban()
     {
-        this.IsBane = true;
+        IsBane = true;
     }
 
-    public void UnbanPlayer()
+    public void Unban()
     {
-        this.IsBane = false;
+        IsBane = false;
     }
 }
