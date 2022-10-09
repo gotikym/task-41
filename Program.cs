@@ -139,7 +139,7 @@ class DataBase
 
 class Player
 {
-    private static int UniqNumbers;
+    private static int _uniqNumbers;
     public int UniqNumber { get; private set; }
     public string NickName { get; private set; }
     public int Level { get; private set; }
@@ -147,7 +147,7 @@ class Player
 
     public Player(string nickName, int level, bool isBanned)
     {
-        UniqNumber = ++UniqNumbers;
+        UniqNumber = ++_uniqNumbers;
         NickName = nickName;
         Level = level;
         IsBanned = isBanned;
