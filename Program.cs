@@ -139,7 +139,7 @@ class DataBase
 
 class Player
 {
-    public static int UniqNumbers { get; private set; }
+    private static int UniqNumbers;
     public int UniqNumber { get; private set; }
     public string NickName { get; private set; }
     public int Level { get; private set; }
